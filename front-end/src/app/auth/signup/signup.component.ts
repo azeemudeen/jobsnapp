@@ -5,6 +5,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import {AuthenticationService} from '../../authentication.service';
 import { User } from '../../model/user';
 import {UserDetails} from '../../model/user-details';
+import { MatSnackBar } from '@angular/material/snack-bar'; 
 
 @Component({
   selector: 'app-signup',
@@ -19,10 +20,12 @@ export class SignupComponent implements OnInit {
   dangerBox = false;
   submitattempt = false;
   profilePhoto: File;
+  currentUser: string = "C";
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -61,7 +64,7 @@ export class SignupComponent implements OnInit {
   
   signup(signupForm) {
     if (signupForm.form.valid  && (this.user.password === this.user.passwordConfirm)) {
-
+      this.user.userType = this.currentUser;
       const formWrapper = new FormData();
       
       const userBlob = new Blob([JSON.stringify(this.user)], { type: 'application/json'});
@@ -74,15 +77,16 @@ export class SignupComponent implements OnInit {
       this.authenticationService.signup(formWrapper)
         .subscribe(
           response => {
-            const userDetails = new UserDetails();
-            this.user = response.body;
-            userDetails.token = response.headers.get('Authorization');
-            userDetails.id = this.user.id;
-            this.user.roles.forEach( (role) => {
-              userDetails.roles.push(role.name);
-            } );
-            this.authenticationService.setLoggedInUser(userDetails);
-            this.router.navigate([this.redirect(userDetails)]);
+            // const userDetails = new UserDetails();
+            // this.user = response.body;
+            // userDetails.token = response.headers.get('Authorization');
+            // userDetails.id = this.user.id;
+            // this.user.roles.forEach( (role) => {
+            //   userDetails.roles.push(role.name);
+            // } );
+            // this.authenticationService.setLoggedInUser(userDetails);
+            this._snackBar.open("User created successfully!", '', {duration: 3000,});
+            this.router.navigate(['/login']);
           },
           error => {
             this.loading = false;

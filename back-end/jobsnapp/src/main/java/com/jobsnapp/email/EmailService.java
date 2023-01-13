@@ -2,6 +2,6 @@ package com.jobsnapp.email;
 
 public interface EmailService {
 	
-	public void sendMail(String email, String subject,String compose);
+	public boolean sendMail(String email, String subject,String compose);
 
 }

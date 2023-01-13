@@ -9,12 +9,18 @@
        
         <div class="card" style="width: 28rem;">
           <div class="header-content">
-            <h1 class="heading">Sign up</h1>
+            <h3 class="heading">Sign up</h3>
             <p class="sub-heading">Create your professional world</p>
           </div>
           <div class="card-body">
             <form class="example-form" name="form" #signupForm="ngForm" (ngSubmit)="signup(signupForm)">            
-                <mat-form-field class="form-input"  appearance="fill">
+              <div class="form-group" style="margin-top: 0px;margin-left: 15px;margin-bottom: 30px;">
+                <mat-radio-group [(ngModel)]="currentUser" aria-label="Select an option" name="radioprivacy" id="radioprivacy" required>
+                  <mat-radio-button value="C"  style="margin-right: 10px;" name="candidate">Candidate</mat-radio-button>
+                  <mat-radio-button value="R" name="recruiter">Recruiter</mat-radio-button>
+                </mat-radio-group> 
+              </div>
+              <mat-form-field class="form-input"  appearance="fill">
                     <mat-label>First Name</mat-label>
                     <input matInput type="text" name="name" id="name" placeholder="Ex. Nick" [(ngModel)]="user.name" #name="ngModel" required [class.is-invalid]="name.invalid && submitattempt">
                 </mat-form-field><br>
@@ -52,12 +58,12 @@
                   <small *ngIf="profilePhoto && (profilePhoto.type !='image/jpeg' && profilePhoto.type !='image/png') && submitattempt " >Image file must be jpeg or png</small>
                   <small *ngIf="!profilePhoto && submitattempt" style="color: red;">Please choose profile photo</small>
                 </div>
-
+                <br>
                 <div>
                   <label for="profilephoto" style="display: block">
-                    <span>Resume </span> <span class="text-danger" >*</span>
+                    <span>Resume </span>
                   </label>
-                  <input #profilephoto id="resume" type="file" accept=".pdf" style="display: block" (change)="setProfilePhoto(profilephoto)" required >
+                  <input #profilephoto id="resume" type="file" accept=".pdf" style="display: block">
                   <small *ngIf="profilePhoto && (profilePhoto.type !='image/jpeg' && profilePhoto.type !='image/png') && submitattempt " >Resume file must be pdf</small>
                   <small *ngIf="!profilePhoto && submitattempt" style="color: red;">Please choose resume</small>
                 </div>

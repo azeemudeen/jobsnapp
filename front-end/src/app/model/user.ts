@@ -27,5 +27,5 @@ export class User {
   twitter: string;
   github: string;
   chats: Array <Chat> = new Array <Chat>();
-
+  userType: string;
 }

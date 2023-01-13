@@ -13,13 +13,13 @@
         <p class="sub-heading">Stay tuned to your professional world</p>
       </div>
       <div class="card-body">
-        <div class="form-group" style="margin-top: 0px;margin-left: 15px;margin-bottom: 30px;">
-          <mat-radio-group  aria-label="Select an option" name="radioprivacy" id="radioprivacy" required>
-            <mat-radio-button [value]=0  style="margin-right: 10px;" name="private">Candidate</mat-radio-button>
-            <mat-radio-button [value]=1 name="public">Recruiter</mat-radio-button>
-          </mat-radio-group> 
-        </div>   
-          <form class="example-form" name="form" #loginform="ngForm" (ngSubmit)="f.form.valid && login(loginform)" #f="ngForm" novalidate>
+        <form class="example-form" name="form" #loginform="ngForm" (ngSubmit)="f.form.valid && login(loginform)" #f="ngForm" novalidate>
+            <!-- <div class="form-group" style="margin-top: 0px;margin-left: 15px;margin-bottom: 30px;">
+              <mat-radio-group  [(ngModel)]="currentUser" aria-label="Select an option" name="radioprivacy" id="radioprivacy" required>
+                <mat-radio-button value="C"  style="margin-right: 10px;" name="candidate">Candidate</mat-radio-button>
+                <mat-radio-button value="R" name="recruiter">Recruiter</mat-radio-button>
+              </mat-radio-group> 
+            </div>    -->
             <mat-form-field class="form-input" appearance="fill">
               <mat-label>Email</mat-label>
               <input type="email" name="username" [(ngModel)]="model.username" #username="ngModel" required  matInput placeholder="Ex. pat@example.com">
@@ -31,7 +31,7 @@
                <mat-error  *ngIf="f.submitted && !password.valid" style="color: red;">Password is <strong>required</strong></mat-error>
             </mat-form-field> <br>
 
-            <a href="" class="forgot-password" data-cie-control-urn="forgot-password-btn">Forgot password?</a><br>
+            <!-- <a href="" class="forgot-password" data-cie-control-urn="forgot-password-btn">Forgot password?</a><br> -->
             <div *ngIf="loginerror && dangerBox" class="alert alert-danger" role="alert">
               <small class="text-danger" >{{loginerror.error.message}}{{loginmsg}}</small>
                 <button style="color: #ff0b00; background-color: transparent" type="button" class="close" aria-label="Close" (click)="dangerBox = false">

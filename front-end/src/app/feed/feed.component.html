@@ -17,10 +17,10 @@
                     <div *ngIf=" user.currentJob && user.currentCompany">
                         <p class="card-text">{{user.currentJob}} at {{user.currentCompany}}</p>
                     </div>
-                    <hr style="height:1px; color:#8f9299;">
+                    <!-- <hr style="height:1px; color:#8f9299;">
                         <p style= "text-align:left; padding-left:15px;">
                             <b>Connections: </b> {{network.length}}</p>
-                    <hr style="height:1px; color:#8f9299;">
+                    <hr style="height:1px; color:#8f9299;"> -->
                     <button *ngIf="userDetails" type="button" class="btn profile-btn" (click)="goToProfile()">View my profile</button>
                 </div>
             </div>

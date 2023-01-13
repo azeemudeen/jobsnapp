@@ -33,14 +33,14 @@ public class UserService {
     /* --------- NETWORK --------- */
 
     public void newConnection(User user,Long userFollowingId) {
-        System.out.println(user.getId()+" wants to connect with "+userFollowingId);
+        //System.out.println(user.getId()+" wants to connect with "+userFollowingId);
         User userToBeFollowed = userRepository.findById(userFollowingId).orElseThrow(()-> new UserNotFoundException("Id: "+userFollowingId));
         Connection newConnection = new Connection(user,userToBeFollowed);
         Notification notification = new Notification(CONNECTION_REQUEST,userToBeFollowed,newConnection);
 
-        System.out.println("Save connection");
-        System.out.println(notification);
-        System.out.println(newConnection);
+        //System.out.println("Save connection");
+        //System.out.println(notification);
+        //System.out.println(newConnection);
         notificationRepository.save(notification);
         connectionRepository.save(newConnection);
     }
@@ -112,7 +112,7 @@ public class UserService {
                         Picture tempPicture = new Picture(pict.getId(),pict.getName(),pict.getType(),decompressBytes(pict.getBytes()));
                         tempPicture.setCompressed(false);
                         newPicts.add(tempPicture);
-                        System.out.println("> Picture compressed and saved saved ");
+                        //System.out.println("> Picture compressed and saved saved ");
                     }else
                         newPicts.add(pict);
                 }
@@ -149,27 +149,27 @@ public class UserService {
         Set<User> network = new HashSet<>();
 
         Set<Connection> connectionsFollowing = currentUser.getUsersFollowing();
-        System.out.println("connectionsFollowing");
+        //System.out.println("connectionsFollowing");
         for(Connection con: connectionsFollowing) {
             if(con.getIsAccepted()){
                 User userinNetwork = con.getUserFollowed();
-                System.out.println(userinNetwork.getName());
+                //System.out.println(userinNetwork.getName());
                 network.add(userinNetwork);
             }
         }
 
         Set<Connection> connectionsFollowedBy = currentUser.getUserFollowedBy();
-        System.out.println("connectionsFollowedBy");
+        //System.out.println("connectionsFollowedBy");
         for(Connection con: connectionsFollowedBy) {
             if(con.getIsAccepted()){
                 User userinNetwork = con.getUserFollowing();
-                System.out.println(userinNetwork.getName());
+                //System.out.println(userinNetwork.getName());
                 network.add(userinNetwork);
             }
         }
 
         for(User u: network){
-            System.out.println(u.getName());
+            //System.out.println(u.getName());
             Picture uPic = u.getProfilePicture();
             if(uPic!=null && uPic.isCompressed()) {
                 Picture temp = new Picture(uPic.getName(), uPic.getType(), decompressBytes(uPic.getBytes()));
@@ -187,15 +187,15 @@ public class UserService {
     public List<User> getUsers(){
         Set<User> usersWithoutAdmin = new HashSet<>();
         List<User> users = userRepository.findAll();
-        System.out.println("++++++++++++++++++++");
+        //System.out.println("++++++++++++++++++++");
         for (User u: users){
 
             if(!u.getName().equals("admin")){
-                System.out.println(u.getName());
+                //System.out.println(u.getName());
                 usersWithoutAdmin.add(u);
             }
         }
-        System.out.println("++++++++++++++++++++");
+        //System.out.println("++++++++++++++++++++");
         return new ArrayList<>(usersWithoutAdmin);
     }
 
@@ -237,16 +237,16 @@ public class UserService {
         for(SkillsAndExperience s:skills){
             Integer editDist = Utils.minDistance(s.getDescription().toLowerCase(),j.getTitle().toLowerCase());
 
-            System.out.println("User: "+u.getName());
-            System.out.println("Job: "+j.getTitle());
-            System.out.println("Skills: "+s.getDescription());
-            System.out.println("Score: "+editDist+"\n\n");
+            //System.out.println("User: "+u.getName());
+            //System.out.println("Job: "+j.getTitle());
+            //System.out.println("Skills: "+s.getDescription());
+            //System.out.println("Score: "+editDist+"\n\n");
             avgDistance += editDist;
         }
         if(u.getCurrentJob()!=null)
             avgDistance += Utils.minDistance(u.getCurrentJob().toLowerCase(),j.getTitle().toLowerCase());
         if (avgDistance != 0) {
-            System.out.println("Avg Score: " + (int) (((double) avgDistance) / ((double) skills.size())));
+            //System.out.println("Avg Score: " + (int) (((double) avgDistance) / ((double) skills.size())));
             return (int) (((double) avgDistance) / ((double) skills.size()));
         } else {
             return -1;
@@ -260,10 +260,10 @@ public class UserService {
         for(SkillsAndExperience s:skills){
             Integer editDist = Utils.minDistance(s.getDescription().toLowerCase(),p.getContent().toLowerCase());
 
-            System.out.println("User: "+u.getName());
-            System.out.println("Job: "+p.getContent());
-            System.out.println("Skills: "+s.getDescription());
-            System.out.println("Score: "+editDist+"\n\n");
+            //System.out.println("User: "+u.getName());
+            //System.out.println("Job: "+p.getContent());
+            //System.out.println("Skills: "+s.getDescription());
+            //System.out.println("Score: "+editDist+"\n\n");
             avgDistance += editDist;
         }
 
@@ -271,7 +271,7 @@ public class UserService {
             avgDistance += Utils.minDistance(u.getCurrentJob().toLowerCase(),p.getContent().toLowerCase());
 
         if (avgDistance != 0) {
-            System.out.println("Avg Score: " + (int) (((double) avgDistance) / ((double) skills.size())));
+            //System.out.println("Avg Score: " + (int) (((double) avgDistance) / ((double) skills.size())));
             return (int) (((double) avgDistance) / ((double) skills.size()));
         } else {
             return -1;

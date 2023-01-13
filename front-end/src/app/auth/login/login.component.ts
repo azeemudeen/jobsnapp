@@ -7,6 +7,7 @@ import { AuthenticationService } from '../../authentication.service';
 import { NgForm } from '@angular/forms';
 import { User } from '../../model/user';
 import { UserDetails } from '../../model/user-details';
+import { GlobalConstants } from 'src/app/common/GlobalConstants';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
   loginmsg: string;
   dangerBox = false;
   submitattempt = false;
+  currentUser: string = 'C';
 
   constructor(
     private route: ActivatedRoute,
@@ -56,12 +58,13 @@ export class LoginComponent implements OnInit {
     }
     return flag;
   }
-
+  
   login(loginform) {
+    this.model.user_type = this.currentUser;
     if (loginform.form.valid) {
       this.loading = true;
       this.authenticationService
-        .login(this.model.username, this.model.password)
+        .login(this.model.username, this.model.password, this.model.user_type)
         .subscribe(
           (response) => {
             const userDetails = new UserDetails();
@@ -71,11 +74,14 @@ export class LoginComponent implements OnInit {
             this.user.roles.forEach((role) => {
               if(role.name === 'ADMIN') this.returnUrl = '/admin';
               else if (role.name === 'PROFESSIONAL') this.returnUrl = '/feed';             
-              
+
               userDetails.roles.push(role.name);
             });
             
             this.authenticationService.setLoggedInUser(userDetails);
+            
+            GlobalConstants.currentUser = this.currentUser;
+            console.log(GlobalConstants.currentUser);
             
             this.route.queryParams.subscribe((params) => {
               if (params && params.returnUrl) {

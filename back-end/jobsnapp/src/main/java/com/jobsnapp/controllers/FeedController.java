@@ -45,7 +45,7 @@ public class FeedController {
     @CrossOrigin(origins = "*")
     @GetMapping("/in/{id}/feed-posts")
     public Set<Post> getFeedPosts(@PathVariable Long id) {
-        System.out.println("\n\n\n ------------------- Get feed posts");
+        //System.out.println("\n\n\n ------------------- Get feed posts");
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User with "+id+" not found"));
 
         Set<Post> feedPosts = new HashSet<>();
@@ -113,14 +113,14 @@ public class FeedController {
                         Picture tempPicture = new Picture(pict.getId(),pict.getName(),pict.getType(),decompressBytes(pict.getBytes()));
                         tempPicture.setCompressed(false);
                         newPicts.add(tempPicture);
-                        System.out.println("> Picture compressed and saved saved ");
+                        //System.out.println("> Picture compressed and saved saved ");
                     }else
                         newPicts.add(pict);
                 }
             }
             p.setPictures(newPicts);
-/*            System.out.println(owner);
-            System.out.println(p);*/
+/*            //System.out.println(owner);
+            //System.out.println(p);*/
         }
 
         return feedPosts;
@@ -130,25 +130,25 @@ public class FeedController {
     @PostMapping(value="/in/{id}/feed/new-post", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity newPost(@PathVariable Long id,@RequestPart("object") Post post,@RequestPart(value = "imageFile", required=false) MultipartFile[] files) throws IOException {
 
-        System.out.println("\n\n\n> newPost: "+id);
+        //System.out.println("\n\n\n> newPost: "+id);
         User currentUser = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User with "+id+" not found"));
-        System.out.println("\n> findById\n");
+        //System.out.println("\n> findById\n");
         post.setOwner(currentUser);
-        System.out.println("\n> setOwner\n");
+        //System.out.println("\n> setOwner\n");
         if(files!=null){
             for(MultipartFile file: files){
                 Picture pic = new Picture(file.getOriginalFilename() ,file.getContentType() ,compressBytes(file.getBytes()));
                 pic.setCompressed(true);
                 pic.setPost(post);
                 pictureRepository.save(pic);
-                System.out.println("> Picture compressed and saved saved ");
+                //System.out.println("> Picture compressed and saved saved ");
             }
         }
-        System.out.println("\n> to save\n");
+        //System.out.println("\n> to save\n");
         postRepository.save(post);
-        System.out.println("\n\n\n> New post made with success");
-        System.out.println(post);
-        System.out.println(post.getOwner());
+        //System.out.println("\n\n\n> New post made with success");
+        //System.out.println(post);
+        //System.out.println(post.getOwner());
         return ResponseEntity.ok("\"Post created with success!\"");
     }
 
@@ -156,7 +156,7 @@ public class FeedController {
     @PutMapping("/in/{id}/feed/post-interested/{postdId}")
     public ResponseEntity newInterestedPost(@PathVariable Long id,@PathVariable Long postdId) {
 
-        System.out.println("> /in/{id}/feed/post-interested/{postdId}");
+        //System.out.println("> /in/{id}/feed/post-interested/{postdId}");
         User currentUser = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User with "+id+" not found"));
         Post post = postRepository.findById(postdId).orElseThrow(()->new PostNotFoundException("Post with "+id+" not found"));
 
@@ -173,8 +173,8 @@ public class FeedController {
                 userRepository.save(currentUser);
                 postRepository.save(post);
                 interestReactionRepository.delete(ir);
-                System.out.println("> Reaction deleted");
-                System.out.println(post);
+                //System.out.println("> Reaction deleted");
+                //System.out.println(post);
                 return ResponseEntity.ok("\"Reaction deleted with success!\"");
             }
         }
@@ -186,8 +186,8 @@ public class FeedController {
             notificationRepository.save(notification);
         }
         interestReactionRepository.save(newReaction);
-        System.out.println("> New reaction made with success");
-        System.out.println(post);
+        //System.out.println("> New reaction made with success");
+        //System.out.println(post);
         return ResponseEntity.ok("\"Interested in post created with success!\"");
     }
 
@@ -195,19 +195,19 @@ public class FeedController {
     @GetMapping("/in/{id}/feed/is-interested/{postdId}")
     public ResponseEntity<?> isInterestedPost(@PathVariable Long id, @PathVariable Long postdId) {
 
-        System.out.println("\n> ----- Reaction search\n");
+        //System.out.println("\n> ----- Reaction search\n");
         InterestReaction isInterested = null;
         Post post = postRepository.findById(postdId).orElseThrow(()->new PostNotFoundException("Post with "+id+" not found"));
         User currentUser = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User with "+id+" not found"));
 
         for(InterestReaction ir: post.getInterestReactions()) {
             if(ir.getUserMadeBy()==currentUser) {
-                System.out.println("> Reaction found");
+                //System.out.println("> Reaction found");
                 return ResponseEntity.ok(ir);
             }
         }
-        System.out.println("> "+isInterested);
-        System.out.println(post);
+        //System.out.println("> "+isInterested);
+        //System.out.println(post);
         return ResponseEntity.ok(null);
     }
 
@@ -218,9 +218,9 @@ public class FeedController {
         User currentUser = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User with "+id+" not found"));
         Post post = postRepository.findById(postdId).orElseThrow(()->new PostNotFoundException("Post with "+id+" not found"));
         userService.newPostComment(currentUser,post,comment);
-        System.out.println("> New comment made with success");
-        System.out.println(comment);
-        System.out.println(post);
+        //System.out.println("> New comment made with success");
+        //System.out.println(comment);
+        //System.out.println(post);
         return ResponseEntity.ok("\"Comment in post created with success!\"");
     }
 
@@ -232,7 +232,7 @@ public class FeedController {
         List<Post> recommendedPosts = new ArrayList<>();
         User currentUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with " + id + " not found"));
 
-        System.out.println("\n\n\n 1 ===================================\n\n\n");
+        //System.out.println("\n\n\n 1 ===================================\n\n\n");
         if (currentUser.getRecommendedPosts().size() != 0) {
 
             for (Post p : currentUser.getRecommendedPosts()) {
@@ -246,10 +246,10 @@ public class FeedController {
         }else {
             return new ArrayList<>(getFeedPosts(id));
         }
-        System.out.println("\n\n\n 2 ===================================\n\n\n");
+        //System.out.println("\n\n\n 2 ===================================\n\n\n");
         Collections.reverse(recommendedPosts);
 
-        System.out.println("\n\n\n 3 ===================================\n\n\n");
+        //System.out.println("\n\n\n 3 ===================================\n\n\n");
         for(Post p: recommendedPosts) {
             User owner = p.getOwner();
 
@@ -283,14 +283,14 @@ public class FeedController {
                         Picture tempPicture = new Picture(pict.getId(),pict.getName(),pict.getType(),decompressBytes(pict.getBytes()));
                         tempPicture.setCompressed(false);
                         newPicts.add(tempPicture);
-                        System.out.println("> Picture compressed and saved saved ");
+                        //System.out.println("> Picture compressed and saved saved ");
                     }else
                         newPicts.add(pict);
                 }
             }
             p.setPictures(newPicts);
-/*            System.out.println(owner);
-            System.out.println(p);*/
+/*            //System.out.println(owner);
+            //System.out.println(p);*/
         }
         return recommendedPosts;
     }

@@ -1,25 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { Job } from '../model/job';
-import { User } from '../model/user';
+import { Job } from 'src/app/model/job';
+import { User } from 'src/app/model/user';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../services/user.service';
-import {AuthenticationService} from '../authentication.service';
-import {UserDetails} from '../model/user-details';
-import { JobsService } from '../services/jobs.service';
-import { GlobalConstants } from '../common/GlobalConstants';
+import {UserService} from 'src/app/services/user.service';
+import { AuthenticationService } from 'src/app/authentication.service';
+import { UserDetails } from 'src/app/model/user-details';
+import { JobsService } from 'src/app/services/jobs.service';
+import { GlobalConstants } from 'src/app/common/GlobalConstants';
 
 @Component({
-  selector: 'app-jobs',
-  templateUrl: './jobs.component.html',
-  styleUrls: ['./jobs.component.css']
+  selector: 'app-createjob',
+  templateUrl: './createjob.component.html',
+  styleUrls: ['./createjob.component.css']
 })
-export class JobsComponent implements OnInit {
+export class CreatejobComponent implements OnInit {
+
   user: User = new User();
   userDetails: UserDetails;
   job: Job = new Job();
   jobs: Job[] = new Array<Job>();
   recommendedJobs: Job[] = new Array<Job>();
-  sortType: number=0
+  sortType: number=0;
+  experience:string;
 
   constructor(
     private route: ActivatedRoute,
@@ -90,9 +92,10 @@ export class JobsComponent implements OnInit {
   jobSubmit(jobForm){
     if(jobForm.form.valid){
       this.job.timestamp = new Date();
+      this.job.description.concat("\n"+this.experience);
       this.jobService.addJob(this.job,this.userDetails.id).subscribe(
         responce => {
-          this.ngOnInit();
+          this.router.navigate(['/jobs']).then(() => location.reload());
         },
         error => {
           alert(error.message);
@@ -129,8 +132,10 @@ export class JobsComponent implements OnInit {
       return false;  
     }
 
-  goToCreateJob(){
-    this.router.navigate(['/createjob'])
-  }
+    goToProfile(){
+      this.router.navigate(['/users/' + this.userDetails.id.toString()]).then(() => {
+        location.reload();
+      });
+    }
 
 }

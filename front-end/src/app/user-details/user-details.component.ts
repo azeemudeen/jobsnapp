@@ -19,6 +19,8 @@ import { Connection } from '../model/connection';
 })
 export class UserDetailsComponent implements OnInit {
 
+  public static currentUser:string;
+  
   user: User = new User();
   skillsexperience: SkillsAndExperience = new SkillsAndExperience();
   validprofphoto = true;

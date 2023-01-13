@@ -19,8 +19,8 @@ export class AuthenticationService{
 
   constructor(private http: HttpClient, private router : Router) { }
 
-  login(username: string, password: string): Observable<HttpResponse<User>> {
-        const ln: Login = { username, password };
+  login(username: string, password: string, userType: string): Observable<HttpResponse<User>> {
+        const ln: Login = { username, password , userType};
         return this.http.post<User>('https://localhost:8443/login', ln, { observe: 'response'});
     }
 
@@ -32,7 +32,7 @@ export class AuthenticationService{
       // remove userDetails from local storage to log user out
       this.setLoggedInUser(null);
       this.router.navigate(['/login']).then(() => {
-        location.reload(true);
+        location.reload();
       });
   }
 

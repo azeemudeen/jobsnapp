@@ -29,6 +29,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_type")
+    private String userType;
+    
     @Column(name = "email", nullable = false) @NonNull
     @Email
     private String username;
@@ -157,8 +160,7 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER,mappedBy = "users")
     @JsonIgnoreProperties("users")
     private Set<Chat> chats = new HashSet<>();
-
-
+    
     public User(@NonNull @Email String username, @NotBlank String password, @NonNull String name, @NonNull String surname) {
         this.username = username;
         this.password = password;
