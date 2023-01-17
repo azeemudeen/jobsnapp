@@ -8,11 +8,13 @@ import { NgForm } from '@angular/forms';
 import { User } from '../../model/user';
 import { UserDetails } from '../../model/user-details';
 import { GlobalConstants } from 'src/app/common/GlobalConstants';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  providers: [GlobalConstants]
 })
 export class LoginComponent implements OnInit {
   user: User;
@@ -28,7 +30,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private global: GlobalConstants
   ) {}
 
   ngOnInit(): void {
@@ -64,7 +67,7 @@ export class LoginComponent implements OnInit {
     if (loginform.form.valid) {
       this.loading = true;
       this.authenticationService
-        .login(this.model.username, this.model.password, this.model.user_type)
+        .login(this.model.username, this.model.password)
         .subscribe(
           (response) => {
             const userDetails = new UserDetails();
@@ -77,11 +80,12 @@ export class LoginComponent implements OnInit {
 
               userDetails.roles.push(role.name);
             });
-            
             this.authenticationService.setLoggedInUser(userDetails);
             
-            GlobalConstants.currentUser = this.currentUser;
-            console.log(GlobalConstants.currentUser);
+            // this.global.currentUser = this.user.userType;
+            // console.log("User type:"+this.global.currentUser);
+            localStorage.setItem('currentUser',this.user.userType);
+            console.log("User type:"+localStorage.getItem('currentUser'));
             
             this.route.queryParams.subscribe((params) => {
               if (params && params.returnUrl) {

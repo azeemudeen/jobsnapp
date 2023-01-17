@@ -7,6 +7,7 @@ import com.jobsnapp.enumerations.RoleType;
 import com.jobsnapp.enumerations.SkillType;
 import com.jobsnapp.exceptions.UserNotFoundException;
 import com.jobsnapp.model.Picture;
+import com.jobsnapp.model.Resume;
 import com.jobsnapp.model.Role;
 import com.jobsnapp.model.SkillsAndExperience;
 import com.jobsnapp.model.User;
@@ -30,6 +31,7 @@ import static com.jobsnapp.utils.PictureSave.*;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @RestController
 @AllArgsConstructor
@@ -44,11 +46,12 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/signup", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> signup(@RequestPart("object") User user, @RequestPart(value = "imageFile") MultipartFile file) throws IOException {
+    public ResponseEntity<?> signup(@RequestPart("object") User user, @RequestPart(value = "imageFile") MultipartFile file, @RequestPart(value = "resumeFile",required = false) MultipartFile resumefile) throws IOException {
     	if(userRepository.findUserByUsername(user.getUsername()) == null) {
             if (user.getPassword().equals(user.getPasswordConfirm())) {
+            	
         		String phone = user.getPhoneNumber();
-            	if(phone != null && !StringUtils.isNumeric(phone) && phone.length() != 10) {
+            	if(phone != null && StringUtils.isNumeric(phone) && phone.length() != 10) {
             		return ResponseEntity
                             .badRequest()
                             .body("{\"timestamp\": " + "\"" + new Date().toString() + "\","
@@ -56,6 +59,19 @@ public class UserController {
                                     + "\"error\": \"Bad Request\", "
                                     + "\"message\": \"Phone number must be 10 digits!\"}"
                             );
+            	}
+            	
+            	String email = user.getUsername();
+            	boolean isValidEmail = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
+            	        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$").matcher(email).matches();
+            	if(email != null && !isValidEmail) {
+            		return ResponseEntity
+            				.badRequest()
+            				.body("{\"timestamp\": " + "\"" + new Date().toString() + "\","
+            						+ "\"status\": 400, "
+            						+ "\"error\": \"Bad Request\", "
+            						+ "\"message\": \"Invalid Email address!\"}"
+            						);
             	}
                 user.setPassword(encoder.encode(user.getPassword()));
                 Set<Role> roles = new HashSet<>();
@@ -66,9 +82,21 @@ public class UserController {
                     Picture pic = new Picture(file.getOriginalFilename() ,file.getContentType() ,compressBytes(file.getBytes()));
                     pic.setCompressed(true);
                     user.setProfilePicture(pic);
-                    System.out.println(pic);
                     System.out.println("> Picture saved");
                 }
+                if(resumefile!=null) {
+                	Resume resume = new Resume(resumefile.getOriginalFilename(), resumefile.getContentType(), resumefile.getBytes());
+                	user.setResumeFile(resume);
+                } else if(user.getUserType().equals("C")){
+                	return ResponseEntity
+            				.badRequest()
+            				.body("{\"timestamp\": " + "\"" + new Date().toString() + "\","
+            						+ "\"status\": 400, "
+            						+ "\"error\": \"Bad Request\", "
+            						+ "\"message\": \"Resume is mandatory!\"}"
+            						);
+                }
+
                 userRepository.save(user);
                 System.out.println("> New user signed up");
             } else
@@ -188,7 +216,19 @@ public class UserController {
     @CrossOrigin(origins = "*")
     @PutMapping("/in/{id}/settings/change-password")
     public ResponseEntity<String> changePassword(@PathVariable Long id , @RequestBody NewUserInfo pwdDetails) {
-        if (!pwdDetails.getNewPassword().equals(pwdDetails.getPasswordConfirm())) {
+    	String email = pwdDetails.getNewUsername();
+    	boolean isValidEmail = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
+    	        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$").matcher(email).matches();
+    	if(email != null && !isValidEmail) {
+    		return ResponseEntity
+    				.badRequest()
+    				.body("{\"timestamp\": " + "\"" + new Date().toString() + "\","
+    						+ "\"status\": 400, "
+    						+ "\"error\": \"Bad Request\", "
+    						+ "\"message\": \"Invalid Email address!\"}"
+    						);
+    	}
+    	if (!pwdDetails.getNewPassword().equals(pwdDetails.getPasswordConfirm())) {
             System.out.println("\"Passwords do not match!\"");
             return ResponseEntity
                     .badRequest()

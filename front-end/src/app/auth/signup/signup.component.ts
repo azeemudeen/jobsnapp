@@ -20,6 +20,7 @@ export class SignupComponent implements OnInit {
   dangerBox = false;
   submitattempt = false;
   profilePhoto: File;
+  resumeFile: File;
   currentUser: string = "C";
 
   constructor(
@@ -62,6 +63,10 @@ export class SignupComponent implements OnInit {
     this.profilePhoto = inputElement.files[0];
   }
   
+  setResumeFile(inputElement){
+    this.resumeFile = inputElement.files[0];
+  }
+
   signup(signupForm) {
     if (signupForm.form.valid  && (this.user.password === this.user.passwordConfirm)) {
       this.user.userType = this.currentUser;
@@ -70,6 +75,14 @@ export class SignupComponent implements OnInit {
       const userBlob = new Blob([JSON.stringify(this.user)], { type: 'application/json'});
       if (this.profilePhoto) {
         formWrapper.append('imageFile' , this.profilePhoto , 'profilePhoto');
+      }
+
+      if (this.resumeFile) {
+        if(this.user.userType == 'R'){
+          this.resumeFile = null;
+        } else{
+          formWrapper.append('resumeFile' , this.resumeFile , this.resumeFile.name);
+        }
       }
       
       formWrapper.append('object', userBlob );

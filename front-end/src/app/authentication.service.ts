@@ -19,8 +19,8 @@ export class AuthenticationService{
 
   constructor(private http: HttpClient, private router : Router) { }
 
-  login(username: string, password: string, userType: string): Observable<HttpResponse<User>> {
-        const ln: Login = { username, password , userType};
+  login(username: string, password: string): Observable<HttpResponse<User>> {
+        const ln: Login = { username, password};
         return this.http.post<User>('https://localhost:8443/login', ln, { observe: 'response'});
     }
 

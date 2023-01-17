@@ -33,9 +33,9 @@ public class User {
     private String userType;
     
     @Column(name = "email", nullable = false) @NonNull
-    @Email
     private String username;
 
+    @JsonIgnoreProperties
     @Column(name = "password") @NotBlank
     private String password;
 
@@ -77,6 +77,12 @@ public class User {
     @ToString.Exclude
     private Picture profilePicture;
 
+    @OneToOne(cascade = CascadeType.ALL )
+    @JsonIgnoreProperties("user")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Resume resumeFile;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("users")
     private Set<Role> roles = new HashSet<>();

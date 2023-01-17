@@ -25,8 +25,8 @@ public class RecommendationAlgos {
         List<User> userList = userService.getUsers();
         List<Job> jobList = jobsRepository.findAll();
 
-        System.out.println("userList.size = "+userList.size());
-        System.out.println("jobList.size = "+jobList.size());
+        //System.out.println("userList.size = "+userList.size());
+        //System.out.println("jobList.size = "+jobList.size());
 
         if(userList.size() > 0 && jobList.size() > 0) {
             double[][] matrix = new double[userList.size()][jobList.size()];
@@ -64,9 +64,9 @@ public class RecommendationAlgos {
             Recommendation recommendation = new Recommendation();
             recommendation.print(matrix);
             double[][] results = recommendation.matrix_factorization(matrix, 2, 0.0002, 0.0);
-            System.out.println("> MATRIX:");
+            //System.out.println("> MATRIX:");
             recommendation.print(matrix);
-            System.out.println("> RESULTS:");
+            //System.out.println("> RESULTS:");
             recommendation.print(results);
 
             for (int u = 0; u < userList.size(); u++) {
@@ -78,9 +78,9 @@ public class RecommendationAlgos {
                 }
                 pairs.sort((Pair p1, Pair p2) -> Double.compare(p2.value, p1.value));
                 if (pairs.size() > 0) {
-                    System.out.println("\n\nFor user: "+userList.get(u).getName());
+                    //System.out.println("\n\nFor user: "+userList.get(u).getName());
                     for (int i = 0; i < pairs.size(); i++) {
-                        System.out.println(jobList.get(pairs.get(i).index).getTitle() +" with "+pairs.get(i).value);
+                        //System.out.println(jobList.get(pairs.get(i).index).getTitle() +" with "+pairs.get(i).value);
 
                         jobs.add(jobList.get(pairs.get(i).index));
                     }
@@ -99,8 +99,8 @@ public class RecommendationAlgos {
         List<User> userList = userService.getUsers();
         List<Post> postList = postRepository.findAll();
 
-        System.out.println(userList.size());
-        System.out.println(postList.size());
+        //System.out.println(userList.size());
+        //System.out.println(postList.size());
 
 
         if(userList.size() > 0 && postList.size() > 0) {
@@ -167,9 +167,9 @@ public class RecommendationAlgos {
                 pairs.sort((Pair p1, Pair p2) -> Double.compare(p2.value, p1.value));
 
                 if (pairs.size() > 0) {
-                    System.out.println("\n\nFor user: "+userList.get(u).getName());
+                    //System.out.println("\n\nFor user: "+userList.get(u).getName());
                     for (int i = 0; i < pairs.size(); i++) {
-                        System.out.println(postList.get(pairs.get(i).index).getContent() +" with "+pairs.get(i).value);
+                        //System.out.println(postList.get(pairs.get(i).index).getContent() +" with "+pairs.get(i).value);
 
                         posts.add(postList.get(pairs.get(i).index));
                     }

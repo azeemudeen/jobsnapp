@@ -41,3 +41,18 @@ ul {
 #applicants li span{
     text-decoration: none;
 }
+
+::ng-deep .filterdialog .modal-dialog{
+    max-width: 70%;
+    width: 80%
+}
+
+.head {
+    margin: 10px 10px 0;
+}
+
+.mat-h1, .mat-headline, .mat-typography h1 {
+	font: 400 24px / 32px Roboto, "Helvetica Neue", sans-serif;
+	letter-spacing: normal;
+	margin: 10px 10px 16px;
+}

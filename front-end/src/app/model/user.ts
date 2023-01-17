@@ -1,8 +1,10 @@
 import { Picture } from './picture';
+import { Resume } from './resume';
 import { Role } from './role';
 import { SkillsAndExperience } from './skills-experience';
 import { Connection } from './connection';
 import { Chat } from './chat';
+import { Job } from './job';
 
 export class User {
   id: number;
@@ -14,6 +16,7 @@ export class User {
   roles: Array<Role> = new Array<Role>();
   phoneNumber: string;
   profilePicture: Picture;
+  resumeFile: Resume;
   city: string;
   currentJob: string;
   currentCompany: string;
@@ -28,4 +31,5 @@ export class User {
   github: string;
   chats: Array <Chat> = new Array <Chat>();
   userType: string;
+  jobsCreated: Array<Job> = new Array <Job>();
 }

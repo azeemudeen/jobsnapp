@@ -6,7 +6,6 @@ import {UserService} from 'src/app/services/user.service';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { UserDetails } from 'src/app/model/user-details';
 import { JobsService } from 'src/app/services/jobs.service';
-import { GlobalConstants } from 'src/app/common/GlobalConstants';
 
 @Component({
   selector: 'app-createjob',

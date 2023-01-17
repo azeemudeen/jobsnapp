@@ -16,7 +16,7 @@
             <form class="example-form" name="form" #signupForm="ngForm" (ngSubmit)="signup(signupForm)">            
               <div class="form-group" style="margin-top: 0px;margin-left: 15px;margin-bottom: 30px;">
                 <mat-radio-group [(ngModel)]="currentUser" aria-label="Select an option" name="radioprivacy" id="radioprivacy" required>
-                  <mat-radio-button value="C"  style="margin-right: 10px;" name="candidate">Candidate</mat-radio-button>
+                  <mat-radio-button value="C"  style="margin-right: 30px;" name="candidate">Candidate</mat-radio-button>
                   <mat-radio-button value="R" name="recruiter">Recruiter</mat-radio-button>
                 </mat-radio-group> 
               </div>
@@ -59,13 +59,13 @@
                   <small *ngIf="!profilePhoto && submitattempt" style="color: red;">Please choose profile photo</small>
                 </div>
                 <br>
-                <div>
-                  <label for="profilephoto" style="display: block">
-                    <span>Resume </span>
+                <div *ngIf="currentUser == 'C'">
+                  <label for="resumeFile" style="display: block">
+                    <span>Resume </span> <span class="text-danger" >*</span>
                   </label>
-                  <input #profilephoto id="resume" type="file" accept=".pdf" style="display: block">
-                  <small *ngIf="profilePhoto && (profilePhoto.type !='image/jpeg' && profilePhoto.type !='image/png') && submitattempt " >Resume file must be pdf</small>
-                  <small *ngIf="!profilePhoto && submitattempt" style="color: red;">Please choose resume</small>
+                  <input #resumeFile id="resume" type="file" accept=".pdf" style="display: block" (change)="setResumeFile(resumeFile)" required>
+                  <small *ngIf="resumeFile && (resumeFile.type !='application/pdf') && submitattempt " >Resume file must be pdf</small>
+                  <small *ngIf="!resumeFile && submitattempt" style="color: red;">Please choose resume</small>
                 </div>
 
                 <div *ngIf="signuperror && dangerBox && profilePhoto" class="alert alert-danger" role="alert" style="margin-top: 10px; margin-bottom: 5px;">

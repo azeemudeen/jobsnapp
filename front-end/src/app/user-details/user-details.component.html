@@ -27,12 +27,12 @@
                       <p class="text-muted font-size-sm">{{user.city}}</p>
                       <div>
                         <div *ngIf="user.id && userDetails && userDetails.id != user.id && !isAdmin(connectedUser)">
-                            <div *ngIf="!connected(user.id) && !hasRequestPending(user.id)" class="connect-buttons-container">
+                            <!-- <div *ngIf="!connected(user.id) && !hasRequestPending(user.id)" class="connect-buttons-container">
                                 <button class="btn btn-secondary request-connect-button" type="button" (click)="addConnection(user)"> 
                                 <i class="fas fa-plus"></i>
                                 Add Connection
                               </button>
-                            </div>
+                            </div> -->
                             <div *ngIf="hasRequestPending(user.id)" class="connect-buttons-container">
                               <button class="btn btn-outline-primary disabled-connect-button" type="button" disabled>
                                 <i class="fas fa-clock"></i>
@@ -56,6 +56,12 @@
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div *ngIf="user.userType == 'C'" class="card mt-3 text-center">
+                <div class="card-body">
+                  <div class="card-title fs-6"> <strong>Resume</strong></div>
+                  <a [href]="pdfHref" target="_blank" class="card-link">Click here to view</a>
                 </div>
               </div>
               <div class="card mt-3">
@@ -96,7 +102,7 @@
                           <div *ngIf="user.id && userDetails && userDetails.id == user.id">
                             <ul  class="list-group">
                               <li *ngFor="let work of user.workExperience;" style="padding-top: 10px;" >
-                                <span style="font-size: large;font-weight: bold;vertical-align: middle;" class="align-middle">{{work.description}}</span>
+                                <span style="font-size: 12pt;vertical-align: middle; padding-bottom: 30px;" class="align-middle">{{work.description}}</span>
                               </li>
                             </ul>
 
@@ -104,7 +110,7 @@
                           <div *ngIf="user.id && userDetails && userDetails.id != user.id">
                             <ul  class="list-group">    
                                 <li *ngFor="let work of user.workExperience;">
-                                    <span *ngIf="work.isPublic == 1" style="font-size: large;font-weight: bold;vertical-align: middle;" class="align-middle"> {{work.description}}</span>
+                                    <span *ngIf="work.isPublic == 1" style="font-size: 12pt;font-weight: bold;vertical-align: middle;" class="align-middle"> {{work.description}}</span>
                                 </li>
                             </ul>
                           </div>
@@ -133,7 +139,7 @@
                           <div *ngIf="user.id && userDetails && userDetails.id == user.id">
                             <ul  class="list-group">
                               <li *ngFor="let ed of user.education;" style="padding-top: 10px;" >
-                                <span style="font-size: large;font-weight: bold;vertical-align: middle;" class="align-middle">{{ed.description}}</span>
+                                <span style="font-size: 12pt;vertical-align: middle;  padding-bottom: 30px;" class="align-middle">{{ed.description}}</span>
                               </li>
                             </ul>
 
@@ -141,7 +147,7 @@
                           <div *ngIf="user.id && userDetails && userDetails.id != user.id">
                             <ul  class="list-group">    
                                 <li *ngFor="let ed of user.education;">
-                                    <span *ngIf="ed.isPublic == 1" style="font-size: large;font-weight: bold;vertical-align: middle;" class="align-middle"> {{ed.description}}</span>
+                                    <span *ngIf="ed.isPublic == 1" style="font-size: 12pt;vertical-align: middle;" class="align-middle"> {{ed.description}}</span>
                                 </li>
                             </ul>
                           </div>
@@ -171,8 +177,8 @@
                             <div *ngIf="user.id && userDetails && userDetails.id == user.id" id="mySkills">
                               <ul id="skills_ul">
                                 <li *ngFor="let skill of user.skills;"  >
-                                  <span *ngIf="skill.isPublic == 1" class="align-middle skill">{{skill.description}}</span>
-                                  <span *ngIf="skill.isPublic == 0" class="align-middle skill">{{skill.description}}</span>
+                                  <span class="align-middle skill">{{skill.description}}</span>
+                                  <!-- <span *ngIf="skill.isPublic == 0" class="align-middle skill">{{skill.description}}</span> -->
                                 </li>
                               </ul>
   
@@ -180,8 +186,8 @@
                             <div *ngIf="user.id && userDetails && userDetails.id != user.id" id="mySkills">
                               <ul id="skills_ul">
                                 <li *ngFor="let skill of user.skills;"  >
-                                  <span *ngIf="skill.isPublic == 1" class="align-middle skill">{{skill.description}}</span>
-                                  <span *ngIf="skill.isPublic == 0 && connected(user.id)" class="align-middle skill">{{skill.description}}</span>
+                                  <span class="align-middle skill">{{skill.description}}</span>
+                                  <!-- <span *ngIf="skill.isPublic == 0 && connected(user.id)" class="align-middle skill">{{skill.description}}</span> -->
                                 </li>
                               </ul>
                             </div>
@@ -215,7 +221,6 @@
                 <input matInput type="text" name="work" id="work" placeholder="Work Experience" [(ngModel)]="skillsexperience.description" required>
               </mat-form-field> <br>
           </div>
-          <hr>
           <!-- <div class="form-group" style="margin-top: 20px;">
             <h3>Privacy</h3>
             <mat-radio-group  aria-label="Select an option" name="radioprivacy" id="radioprivacy" [(ngModel)]="skillsexperience.isPublic" required>
@@ -247,7 +252,7 @@
                 <input matInput type="text" name="education" id="education" placeholder="Education" [(ngModel)]="skillsexperience.description" required>
               </mat-form-field> <br>
           </div>
-          <hr>
+          <!-- <hr> -->
           <!-- <div class="form-group" style="margin-top: 20px;">
             <h3>Privacy</h3>
             <mat-radio-group  aria-label="Select an option" name="radioprivacy" id="radioprivacy" [(ngModel)]="skillsexperience.isPublic" required>
@@ -277,7 +282,7 @@
                 <input matInput type="text" name="skill" id="skill" placeholder="Skill" [(ngModel)]="skillsexperience.description" required>
               </mat-form-field> <br>
           </div>
-          <hr>
+          <!-- <hr> -->
           <!-- <div class="form-group" style="margin-top: 20px;">
             <h3>Privacy</h3>
             <mat-radio-group  aria-label="Select an option" name="radioprivacy" id="radioprivacy" [(ngModel)]="skillsexperience.isPublic" required>
