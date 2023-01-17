@@ -7,4 +7,5 @@ export class Job {
     timestamp: Date;
     userMadeBy: User;
     usersApplied: Array<User> = new Array<User>();
+    filtered: boolean;
 }

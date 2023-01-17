@@ -36,13 +36,12 @@
                                     style="text-decoration:none">{{u.name}} {{u.surname}} </span>
                             </li>
                         </u>
-
-
                     </div>
                     <hr style="width: 90%;margin-left: 5%;margin-right: 5%;">
                     <div class="card-body" style="margin-left: 2%;padding-bottom: 10px;">
                         <div class="col-sm-12 col-12 text-center">
-                            <button type="button" class="btn btn-success" (click)="open(content,job)"> <i class="fas fa-filter"></i> Filter Applicants</button>
+                            <button *ngIf="!job.filtered" type="button" class="btn btn-primary" (click)="open(content,job)"> <i class="fas fa-filter"></i> Filter Applicants</button>
+                            <button disabled *ngIf="job.filtered" type="button" class="btn btn-outline-success"> <i class="fas fa-check"></i> Filtered</button>
                         </div> 
 
                         <div style="padding-bottom: 20px;float:right;margin-right: 1%;">
@@ -105,13 +104,6 @@
       </button>
     </div>
     <div class="modal-body">
-        <!-- <u id="applicants" style="text-decoration:none">
-            <li *ngFor="let u of job.usersApplied" style="text-decoration:none">
-                <span class="align-middle applicant" [routerLink]="['/users/', u.id]"
-                    style="text-decoration:none">{{u.name}} {{u.surname}} </span>
-            </li>
-        </u> -->
-        <!-- <div *ngFor="let applicant of jobs."></div> -->
         <table class="table">
             <thead>
               <tr>
@@ -126,7 +118,7 @@
             <tbody>
               <tr *ngFor="let u of currentJob.usersApplied;let i=index;">
                 <th scope="row">{{i+1}}</th>
-                <td>{{u.name}} {{u.surname}}</td>
+                <td><a target="_blank" [routerLink]="['/users/', u.id]">{{u.name}} {{u.surname}}</a></td>
                 <td>{{u.phoneNumber}}</td>
                 <td>{{u.username}}</td>
                 <td><a target="_blank" [href]="openPdf(u)">View Resume</a></td>
@@ -138,26 +130,8 @@
             </tbody>
           </table>
           <div class="col-sm-12 col-12 text-center ">
-              <button type="button" class="col-md-2 btn btn-primary"> <i class="fas fa-filter"></i> Filter</button>
+              <button [disabled]="clickedfilter" type="button" class="col-md-2 btn btn-primary" (click)="filterApplicants()"> <i class="fas fa-filter"></i> Filter</button>
           </div>
     </div>
-    <!-- <form name="form" #skillsForm="ngForm" (ngSubmit)="informSkillsAndExperience(skillsForm,'EXPERIENCE')">
-      <div class="modal-body">
-        <div class="form-group">
-            <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
-              <mat-label>Add your work experience</mat-label>
-              <input matInput type="text" name="work" id="work" placeholder="Work Experience" [(ngModel)]="skillsexperience.description" required>
-            </mat-form-field> <br>
-        </div>
-        <!-- <div class="form-group" style="margin-top: 20px;">
-          <h3>Privacy</h3>
-          <mat-radio-group  aria-label="Select an option" name="radioprivacy" id="radioprivacy" [(ngModel)]="skillsexperience.isPublic" required>
-            <mat-radio-button  [value]=1 style="margin-right: 10px;" name="public">Public</mat-radio-button>
-            <mat-radio-button  [value]=0 name="private">Private</mat-radio-button>
-          </mat-radio-group> 
-
-        </div>
-      </div>
-    </form> --> 
   </ng-template>
 <app-footer></app-footer>

@@ -75,11 +75,11 @@ export class UserDetailsComponent implements OnInit {
       }
     );
 
-    this.networkService.getNetwork(this.userDetails.id).subscribe(
-      (network) => {
-        Object.assign(this.userNetwork , network);
-      }
-    );
+    // this.networkService.getNetwork(this.userDetails.id).subscribe(
+    //   (network) => {
+    //     Object.assign(this.userNetwork , network);
+    //   }
+    // );
   }
 
   connected(id: number): boolean {
