@@ -45,7 +45,6 @@ public class JobsController {
     @GetMapping("/in/{id}/jobs")
     public Set<Job> getJobs(@PathVariable Long id) {
 
-        System.out.println("\n\ngetJobs\n");
         User currentUser = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User with "+id+" not found"));
         Set<Job> jobs = new HashSet<>();
 
@@ -59,9 +58,7 @@ public class JobsController {
         jobs.addAll(allJobs);
 
 
-        System.out.println("\n");
         for(Job j: jobs) {
-            System.out.println(j);
 
             User owner = j.getUserMadeBy();
 

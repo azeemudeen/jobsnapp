@@ -3,9 +3,10 @@ package com.jobsnapp.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jobsnapp.advices.UserNotFoundAdvice;
+import com.jobsnapp.exceptions.UserNotFoundException;
 import com.jobsnapp.repositories.UserRepository;
 
-import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -20,14 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.RemoteException;
 import java.util.Date;
-
-import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static com.jobsnapp.security.SecurityConstants.EXPIRATION_TIME;
-import static com.jobsnapp.security.SecurityConstants.HEADER_STRING;
-import static com.jobsnapp.security.SecurityConstants.SECRET;
-import static com.jobsnapp.security.SecurityConstants.TOKEN_PREFIX;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
@@ -45,7 +40,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             com.jobsnapp.model.User creds = new ObjectMapper()
                     .readValue(req.getInputStream(), com.jobsnapp.model.User.class);
-
+//            this.userRepository.findByUsernameAndUserType(creds.getUsername(),creds.getUserType()).orElseThrow(() -> new UserNotFoundException(""));
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             creds.getUsername(),
@@ -70,6 +65,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         PrintWriter out = res.getWriter();
         String username = ((User) auth.getPrincipal()).getUsername();
+        RequestContextHolder.getRequestAttributes();
         com.jobsnapp.model.User user = userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException(username));
         user.setPassword(null);
         String userJsonString = new ObjectMapper().writeValueAsString(user);

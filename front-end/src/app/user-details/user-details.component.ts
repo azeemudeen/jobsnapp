@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {User} from '../model/user';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../services/user.service';
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {AuthenticationService} from '../authentication.service';
 import {UserDetails} from '../model/user-details';
 import { Picture } from '../model/picture';
@@ -19,6 +19,8 @@ import { Connection } from '../model/connection';
 })
 export class UserDetailsComponent implements OnInit {
 
+  public static currentUser:string;
+  
   user: User = new User();
   skillsexperience: SkillsAndExperience = new SkillsAndExperience();
   validprofphoto = true;
@@ -36,6 +38,7 @@ export class UserDetailsComponent implements OnInit {
 
   closeResult = '';
 
+  pdfHref: SafeUrl;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,6 +58,9 @@ export class UserDetailsComponent implements OnInit {
 
     this.userService.getOtherUser(this.userDetails.id.toString(),this.route.snapshot.paramMap.get('id').toString()).subscribe((user) => {
         Object.assign(this.user , user);
+        if(this.user.resumeFile != null){
+          this.pdfHref = this.domSanitizer.bypassSecurityTrustUrl('data:application/pdf;base64,' + this.user.resumeFile.bytes);
+        }
       },
       error => {
         alert(error.message);
@@ -169,13 +175,14 @@ export class UserDetailsComponent implements OnInit {
 
       this.skillsexperienceService.addSkill(this.skillsexperience,this.userDetails.id)
         .subscribe(
-          responce => {},
+          responce => {
+            location.reload();
+          },
             error => {
               alert(error.message);
             } 
         );
     }
-    location.reload();
   }
 
   addConnection(user: User) {
@@ -207,13 +214,14 @@ export class UserDetailsComponent implements OnInit {
     if(editform.form.valid) {
       this.userService.editUserJob(this.user)
         .subscribe(
-          responce => {},
+          responce => {
+            location.reload();
+          },
             error => {
               alert(error.message);
             } 
         );
     }
-    location.reload();
   }
 
   

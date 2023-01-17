@@ -31,6 +31,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserRepository userRepository;
 
+//    @Override
+//    protected void configure(HttpSecurity httpSecurity) throws Exception {
+//        httpSecurity
+//        	.authorizeRequests()
+//        	.antMatchers("/")
+//        	.permitAll();
+//    }
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()

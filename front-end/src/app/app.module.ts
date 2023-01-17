@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor} from './auth/helpers/error.interceptor';
@@ -34,6 +35,9 @@ import { UsersettingsComponent } from './usersettings/usersettings.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { JobsComponent } from './jobs/jobs.component';
 import { AdminNavComponent } from './admin/admin-nav/admin-nav.component';
+import { CreatejobComponent } from './jobs/createjob/createjob.component';
+import { GlobalConstants } from './common/GlobalConstants';
+import { FilterApplicantComponent } from './jobs/filter-applicant/filter-applicant.component';
 
 const appRoutes: Routes = [
   {
@@ -71,6 +75,8 @@ const appRoutes: Routes = [
   { path: 'settings', component: UsersettingsComponent},
   { path: 'notifications', component: NotificationsComponent},
   { path: 'jobs', component: JobsComponent},
+  { path: 'createjob', component: CreatejobComponent},
+  { path: 'filter-applicants', component: FilterApplicantComponent},
 ];
 
 @NgModule({
@@ -90,6 +96,8 @@ const appRoutes: Routes = [
     NotificationsComponent,
     JobsComponent,
     AdminNavComponent,
+    CreatejobComponent,
+    FilterApplicantComponent,
   ],
   imports: [
     NgxPaginationModule,
@@ -104,6 +112,7 @@ const appRoutes: Routes = [
     MatFormFieldModule,
     MatGridListModule,
     MatRadioModule,
+    MatSnackBarModule,
     RouterModule.forRoot(appRoutes),
     TooltipModule.forRoot(),
     NgbModule,

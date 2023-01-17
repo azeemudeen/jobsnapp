@@ -1,0 +1,38 @@
+<app-navbar></app-navbar>
+
+<div class="container" id="jobCards" style="padding-bottom: 5%;">
+    <div style="position: sticky !important;"  class="card-group col-xs-12 fixed justify-content-center">
+        <div class="col-sm-5">
+            <div class="text-center">
+                <h1 style="font-weight:bold; font-size: 25px;">Create a Job</h1>
+            </div>
+            <div class="card"  id="addJobCard">
+                <div class="card-body" style= "text-align:center">
+                    <form name="jobForm" #jobForm="ngForm" (ngSubmit)="jobSubmit(jobForm)">
+                        <hr>
+                        <mat-form-field class="form-input"  appearance="fill" style= "width: 100%;">
+                            <mat-label>Job title</mat-label>
+                            <input matInput type="text" id="title" placeholder="Job title" [(ngModel)]="job.title" name="title" #title="ngModel" required >
+                        </mat-form-field><br>
+
+                        <mat-form-field class="form-input"  appearance="fill" style= "width: 100%;">
+                            <mat-label>Experience</mat-label>
+                            <input matInput type="text" id="title" placeholder="Years" [(ngModel)]="experience" name="title" #title="ngModel" required >
+                        </mat-form-field><br>
+
+                        <mat-form-field class="form-input"  appearance="fill" style= "width: 100%;">
+                            <mat-label>Job description</mat-label>
+                            <textarea matInput type="text" id="description" placeholder="Job description" [(ngModel)]="job.description" name="description" #description="ngModel" required></textarea>
+                            
+                        </mat-form-field><br>
+                        <div >
+                            <button class="job-btn btn btn-primary" type="submit">Save</button>   
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

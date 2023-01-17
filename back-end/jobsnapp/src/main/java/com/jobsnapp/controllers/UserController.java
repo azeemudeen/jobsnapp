@@ -3,32 +3,26 @@ package com.jobsnapp.controllers;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.jobsnapp.dto.NewUserInfo;
-import com.jobsnapp.dto.SkillsDTO;
 import com.jobsnapp.enumerations.RoleType;
 import com.jobsnapp.enumerations.SkillType;
-import com.jobsnapp.exceptions.EmailExistsAlreadyException;
-import com.jobsnapp.exceptions.PasswordsNotSameException;
 import com.jobsnapp.exceptions.UserNotFoundException;
-import com.jobsnapp.exceptions.WrongPasswordException;
 import com.jobsnapp.model.Picture;
+import com.jobsnapp.model.Resume;
 import com.jobsnapp.model.Role;
 import com.jobsnapp.model.SkillsAndExperience;
 import com.jobsnapp.model.User;
-import com.jobsnapp.repositories.PictureRepository;
 import com.jobsnapp.repositories.RoleRepository;
 import com.jobsnapp.repositories.SkillsAndExperienceRepository;
 import com.jobsnapp.repositories.UserRepository;
 import com.jobsnapp.security.SecurityConstants;
 
 import lombok.AllArgsConstructor;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +31,7 @@ import static com.jobsnapp.utils.PictureSave.*;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @RestController
 @AllArgsConstructor
@@ -44,7 +39,6 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PictureRepository pictureRepository;
     private final SkillsAndExperienceRepository skillsAndExperienceRepository;
 
     @Autowired
@@ -52,9 +46,33 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/signup", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> signup(@RequestPart("object") User user, @RequestPart(value = "imageFile") MultipartFile file) throws IOException {
-        if(userRepository.findUserByUsername(user.getUsername()) == null) {
+    public ResponseEntity<?> signup(@RequestPart("object") User user, @RequestPart(value = "imageFile") MultipartFile file, @RequestPart(value = "resumeFile",required = false) MultipartFile resumefile) throws IOException {
+    	if(userRepository.findUserByUsername(user.getUsername()) == null) {
             if (user.getPassword().equals(user.getPasswordConfirm())) {
+            	
+        		String phone = user.getPhoneNumber();
+            	if(phone != null && StringUtils.isNumeric(phone) && phone.length() != 10) {
+            		return ResponseEntity
+                            .badRequest()
+                            .body("{\"timestamp\": " + "\"" + new Date().toString() + "\","
+                                    + "\"status\": 400, "
+                                    + "\"error\": \"Bad Request\", "
+                                    + "\"message\": \"Phone number must be 10 digits!\"}"
+                            );
+            	}
+            	
+            	String email = user.getUsername();
+            	boolean isValidEmail = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
+            	        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$").matcher(email).matches();
+            	if(email != null && !isValidEmail) {
+            		return ResponseEntity
+            				.badRequest()
+            				.body("{\"timestamp\": " + "\"" + new Date().toString() + "\","
+            						+ "\"status\": 400, "
+            						+ "\"error\": \"Bad Request\", "
+            						+ "\"message\": \"Invalid Email address!\"}"
+            						);
+            	}
                 user.setPassword(encoder.encode(user.getPassword()));
                 Set<Role> roles = new HashSet<>();
                 Role r = roleRepository.findByName(RoleType.PROFESSIONAL);
@@ -64,9 +82,21 @@ public class UserController {
                     Picture pic = new Picture(file.getOriginalFilename() ,file.getContentType() ,compressBytes(file.getBytes()));
                     pic.setCompressed(true);
                     user.setProfilePicture(pic);
-                    System.out.println(pic);
                     System.out.println("> Picture saved");
                 }
+                if(resumefile!=null) {
+                	Resume resume = new Resume(resumefile.getOriginalFilename(), resumefile.getContentType(), resumefile.getBytes());
+                	user.setResumeFile(resume);
+                } else if(user.getUserType().equals("C")){
+                	return ResponseEntity
+            				.badRequest()
+            				.body("{\"timestamp\": " + "\"" + new Date().toString() + "\","
+            						+ "\"status\": 400, "
+            						+ "\"error\": \"Bad Request\", "
+            						+ "\"message\": \"Resume is mandatory!\"}"
+            						);
+                }
+
                 userRepository.save(user);
                 System.out.println("> New user signed up");
             } else
@@ -97,8 +127,9 @@ public class UserController {
 
         return ResponseEntity.ok().headers(responseHeaders).body(user);
     }
+	
 
-    @CrossOrigin(origins = "*")
+	@CrossOrigin(origins = "*")
     @GetMapping("/in/{id}")
     public User getProfile(@PathVariable Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id "+id+"doesn't exist"));
@@ -126,11 +157,10 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PutMapping("/in/{id}/profile/new-info")
-    public ResponseEntity informPersonalProfile(@PathVariable Long id, @RequestBody SkillsAndExperience skill) {
+    public ResponseEntity<String> informPersonalProfile(@PathVariable Long id, @RequestBody SkillsAndExperience skill) {
         System.out.println("\n\n> informPersonalProfile");
         System.out.println(skill);
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id "+id+"doesn't exist"));
-        Set<SkillsAndExperience> skillsList;
         if(skill.getType() == SkillType.EXPERIENCE){
             skill.setUserExp(user);
         } else if(skill.getType() == SkillType.SKILL) {
@@ -147,7 +177,7 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PutMapping("/in/{id}/editJob")
-    public ResponseEntity editUserJob(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<String> editUserJob(@PathVariable Long id, @RequestBody User user) {
 
         System.out.println("\n\n> Edit User's Job");
         User newUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id "+id+"doesn't exist"));
@@ -172,7 +202,7 @@ public class UserController {
     @CrossOrigin(origins = "*")
     @GetMapping("/in/{id}/profile/{otherUserId}")
     public User showProfile(@PathVariable Long id, @PathVariable Long otherUserId) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id "+id+"doesn't exist"));
+        userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id "+id+"doesn't exist"));
         User userPreview = userRepository.findById(otherUserId).orElseThrow(() -> new UserNotFoundException("User with id "+otherUserId+"doesn't exist"));
         Picture pic = userPreview.getProfilePicture();
         if(pic != null && pic.isCompressed()){
@@ -185,8 +215,20 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PutMapping("/in/{id}/settings/change-password")
-    public ResponseEntity changePassword(@PathVariable Long id , @RequestBody NewUserInfo pwdDetails) {
-        if (!pwdDetails.getNewPassword().equals(pwdDetails.getPasswordConfirm())) {
+    public ResponseEntity<String> changePassword(@PathVariable Long id , @RequestBody NewUserInfo pwdDetails) {
+    	String email = pwdDetails.getNewUsername();
+    	boolean isValidEmail = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
+    	        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$").matcher(email).matches();
+    	if(email != null && !isValidEmail) {
+    		return ResponseEntity
+    				.badRequest()
+    				.body("{\"timestamp\": " + "\"" + new Date().toString() + "\","
+    						+ "\"status\": 400, "
+    						+ "\"error\": \"Bad Request\", "
+    						+ "\"message\": \"Invalid Email address!\"}"
+    						);
+    	}
+    	if (!pwdDetails.getNewPassword().equals(pwdDetails.getPasswordConfirm())) {
             System.out.println("\"Passwords do not match!\"");
             return ResponseEntity
                     .badRequest()
@@ -219,7 +261,7 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PutMapping("/in/{id}/settings/change-username")
-    public ResponseEntity changeUserName(@PathVariable Long id , @RequestBody NewUserInfo details) {
+    public ResponseEntity<String> changeUserName(@PathVariable Long id , @RequestBody NewUserInfo details) {
         String token = null;
         User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id "+id+"doesn't exist"));
 

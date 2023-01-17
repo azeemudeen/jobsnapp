@@ -29,10 +29,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_type")
+    private String userType;
+    
     @Column(name = "email", nullable = false) @NonNull
-    @Email
     private String username;
 
+    @JsonIgnoreProperties
     @Column(name = "password") @NotBlank
     private String password;
 
@@ -74,6 +77,12 @@ public class User {
     @ToString.Exclude
     private Picture profilePicture;
 
+    @OneToOne(cascade = CascadeType.ALL )
+    @JsonIgnoreProperties("user")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Resume resumeFile;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("users")
     private Set<Role> roles = new HashSet<>();
@@ -157,8 +166,7 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER,mappedBy = "users")
     @JsonIgnoreProperties("users")
     private Set<Chat> chats = new HashSet<>();
-
-
+    
     public User(@NonNull @Email String username, @NotBlank String password, @NonNull String name, @NonNull String surname) {
         this.username = username;
         this.password = password;

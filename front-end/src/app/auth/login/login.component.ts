@@ -7,11 +7,14 @@ import { AuthenticationService } from '../../authentication.service';
 import { NgForm } from '@angular/forms';
 import { User } from '../../model/user';
 import { UserDetails } from '../../model/user-details';
+import { GlobalConstants } from 'src/app/common/GlobalConstants';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  providers: [GlobalConstants]
 })
 export class LoginComponent implements OnInit {
   user: User;
@@ -22,11 +25,13 @@ export class LoginComponent implements OnInit {
   loginmsg: string;
   dangerBox = false;
   submitattempt = false;
+  currentUser: string = 'C';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private global: GlobalConstants
   ) {}
 
   ngOnInit(): void {
@@ -56,8 +61,9 @@ export class LoginComponent implements OnInit {
     }
     return flag;
   }
-
+  
   login(loginform) {
+    this.model.user_type = this.currentUser;
     if (loginform.form.valid) {
       this.loading = true;
       this.authenticationService
@@ -71,11 +77,15 @@ export class LoginComponent implements OnInit {
             this.user.roles.forEach((role) => {
               if(role.name === 'ADMIN') this.returnUrl = '/admin';
               else if (role.name === 'PROFESSIONAL') this.returnUrl = '/feed';             
-              
+
               userDetails.roles.push(role.name);
             });
-            
             this.authenticationService.setLoggedInUser(userDetails);
+            
+            // this.global.currentUser = this.user.userType;
+            // console.log("User type:"+this.global.currentUser);
+            localStorage.setItem('currentUser',this.user.userType);
+            console.log("User type:"+localStorage.getItem('currentUser'));
             
             this.route.queryParams.subscribe((params) => {
               if (params && params.returnUrl) {
