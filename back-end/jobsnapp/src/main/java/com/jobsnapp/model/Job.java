@@ -35,21 +35,25 @@ public class Job {
     private Timestamp timestamp;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = {"jobsCreated","jobApplied","recommendedJobs","interestReactions"},allowSetters = true)
+    @JsonIgnoreProperties(value = {"jobsCreated","jobApplied","recommendedJobs","interestReactions","profilePicture"},allowSetters = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private User userMadeBy;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = {"jobApplied","jobsCreated","recommendedJobs","interestReactions"},allowSetters = true)
+    @JsonIgnoreProperties(value = {"jobApplied","jobsCreated","recommendedJobs","interestReactions","profilePicture"},allowSetters = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<User> usersApplied = new HashSet<>();
 
     @ManyToMany(mappedBy="recommendedJobs",fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = {"recommendedJobs","jobsCreated","jobApplied","interestReactions","usersFollowing","userFollowedBy","posts"},allowSetters = true)
+    @JsonIgnoreProperties(value = {"recommendedJobs","jobsCreated","jobApplied","interestReactions","usersFollowing","userFollowedBy","posts","profilePicture"},allowSetters = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<User> recommendedTo = new ArrayList<>();
+    
+    @Column(name="is_filtered")
+    @EqualsAndHashCode.Exclude
+    boolean isFiltered;
 
 }

@@ -10,6 +10,7 @@ import { GlobalConstants } from '../common/GlobalConstants';
 import { environment } from 'src/environments/environment';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FilterApplicantService } from '../services/filterapplicants.service';
 
 @Component({
   selector: 'app-jobs',
@@ -34,7 +35,8 @@ export class JobsComponent implements OnInit {
     private authService: AuthenticationService,
     private jobService: JobsService,
     private modalService: NgbModal,
-    private domSanitizer: DomSanitizer, 
+    private domSanitizer: DomSanitizer,
+    private filterService: FilterApplicantService 
   ) { }
 
   ngOnInit(): void {
@@ -51,16 +53,6 @@ export class JobsComponent implements OnInit {
         alert(error.message);
       }
     );
-    
-    // this.jobService.getRecommendedJobs(this.userDetails.id).subscribe(
-    //   (jobs) => {
-    //     if(jobs.length != 0)
-    //       Object.assign(this.recommendedJobs , jobs);
-    //   },
-    //   error => {
-    //     alert(error.message);
-    //   }
-    // );  
 
     this.jobService.getJobs(this.userDetails.id).subscribe(
       (jobs) => {
@@ -85,6 +77,7 @@ export class JobsComponent implements OnInit {
   
   open(content,job: Job) {
     this.currentJob = job;
+    console.log(this.currentJob.filtered);
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title',windowClass: 'filterdialog'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -112,6 +105,7 @@ export class JobsComponent implements OnInit {
   }
 
   private getDismissReason(reason: any): string {
+    this.selectedUsers.splice(0);
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -181,5 +175,22 @@ export class JobsComponent implements OnInit {
   goToCreateJob(){
     this.router.navigate(['/createjob'])
   }
+  clickedfilter: boolean=false;
+  filterApplicants(){
+    this.clickedfilter = true;
+    this.filterService.filter(this.currentJob.id,this.selectedUsers).subscribe(
+      responce => {
+        this.clickedfilter = false;
+        // this.modalService.dismissAll();
+        // this.ngOnInit();
+        location.reload();
+      },
+      error => {
+        alert(error.message);
+      } 
+    );
+    this.selectedUsers.splice(0);
+  }
+
 
 }

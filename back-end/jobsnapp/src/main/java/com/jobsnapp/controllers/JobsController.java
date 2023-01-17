@@ -48,12 +48,6 @@ public class JobsController {
         User currentUser = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User with "+id+" not found"));
         Set<Job> jobs = new HashSet<>();
 
-/*        jobs.addAll(currentUser.getJobsCreated());
-        Set<User> network = userService.getUserNetwork(currentUser);
-        for(User u: network){
-            jobs.addAll(u.getJobsCreated());
-        }*/
-
         Set<Job> allJobs = new HashSet<>(jobRepository.findAll());
         jobs.addAll(allJobs);
 
