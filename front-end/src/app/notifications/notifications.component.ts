@@ -9,6 +9,8 @@ import { Notification } from '../model/notification';
 import { UserDetails } from '../model/user-details';
 import { NetworkService } from '../services/network.service';
 import { NotificationsService } from '../services/notifications.service';
+import { UserNotificationsService } from '../services/usernotification.service';
+import { UserNotification } from '../model/usernotification';
 
 @Component({
   selector: 'app-notifications',
@@ -20,6 +22,7 @@ export class NotificationsComponent implements OnInit {
   notifications: Notification[] = new Array<Notification>();
   connRequests: Notification[] = new Array<Notification>();
   postNotifications: Notification[] = new Array<Notification>();
+  userNotifications: UserNotification[] = new Array<UserNotification>();
 
   constructor(
     private route: ActivatedRoute,
@@ -27,13 +30,20 @@ export class NotificationsComponent implements OnInit {
     private http: HttpClient,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationsService,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private usernotificationService: UserNotificationsService
   ) { }
 
   ngOnInit(): void {
     this.authenticationService.getLoggedInUser().subscribe((userDetails) => {
       this.userDetails = userDetails;
     });
+
+    this.usernotificationService.getNotifications(this.userDetails.id).subscribe(
+      (userNotifications) => {
+        Object.assign(this.userNotifications , userNotifications);
+      }
+    );
 
     this.notificationService.getNotifications(this.userDetails.id).subscribe(
       (notifications) => {

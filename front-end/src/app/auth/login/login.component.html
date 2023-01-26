@@ -2,12 +2,12 @@
 <div class="container">
   <div class="row  login-card justify-content-center ">
     <div class="mylogo col-6">
-      <img id="mylogo" src="../../../assets/images/logo.png" alt="">
+      <img id="mylogo" src="../../../assets/images/logo.png" alt="Jobsnapp">
     </div>
   </div>
   <div class="row justify-content-center login-card">
    
-    <div class="card" style="width: 28rem;">
+    <div class="shadow card" style="width: 28rem;">
       <div class="header-content">
         <h3 class="heading">Sign in</h3>
         <p class="sub-heading">Stay tuned to your professional world</p>
@@ -20,12 +20,12 @@
                 <mat-radio-button value="R" name="recruiter">Recruiter</mat-radio-button>
               </mat-radio-group> 
             </div>    -->
-            <mat-form-field class="form-input" appearance="fill">
+            <mat-form-field class="form-input" appearance="outline">
               <mat-label>Email</mat-label>
               <input type="email" name="username" [(ngModel)]="model.username" #username="ngModel" required  matInput placeholder="Ex. pat@example.com">
               <mat-error *ngIf="f.submitted && !username.valid" style="color: red;">Email is <strong>required</strong></mat-error>
             </mat-form-field><br>
-            <mat-form-field class="form-input" appearance="fill">
+            <mat-form-field class="form-input" appearance="outline">
               <mat-label>Password</mat-label>
               <input matInput type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required  placeholder="Password">
                <mat-error  *ngIf="f.submitted && !password.valid" style="color: red;">Password is <strong>required</strong></mat-error>
@@ -39,7 +39,7 @@
                 </button>
               </div>
             <div>
-              <button [disabled]="loading" class="sign-in-btn btn btn-primary" type="submit" >Sign in</button>
+              <button [disabled]="loading" class="shadow sign-in-btn btn btn-primary" type="submit" >Sign in</button>
               <div  *ngIf="loading" class="spinner-border spinner-border-sm" role="status"></div>
             </div>
           </form>

@@ -15,6 +15,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar'; 
+import { MatIconModule } from '@angular/material/icon'; 
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor} from './auth/helpers/error.interceptor';
@@ -112,6 +113,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     TooltipModule.forRoot(),
     NgbModule,
+    MatIconModule
   ],
   providers:  [
     UserService,

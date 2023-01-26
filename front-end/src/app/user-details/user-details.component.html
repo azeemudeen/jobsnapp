@@ -12,7 +12,7 @@
     <div class="main-body"> 
         <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
-              <div class="card">
+              <div class="card shadow">
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
                     <div *ngIf="user.profilePicture">
@@ -58,13 +58,13 @@
                   </div>
                 </div>
               </div>
-              <div *ngIf="user.userType == 'C'" class="card mt-3 text-center">
+              <div *ngIf="user.userType == 'C'" class="card mt-3 text-center shadow">
                 <div class="card-body">
                   <div class="card-title fs-6"> <strong>Resume</strong></div>
                   <a [href]="pdfHref" target="_blank" class="card-link">Click here to view</a>
                 </div>
               </div>
-              <div class="card mt-3">
+              <div class="card mt-3 shadow">
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                     <i class="fas fa-envelope" style="color: #158eff;"></i>
@@ -87,7 +87,7 @@
             </div>
             <div class="col-md-8">
               <div class="col-md-12">
-                <div class="card mb-3">
+                <div class="card mb-3 shadow">
                   <div class="card-body">
                     <div class="container" id="main-container">
                       <div class="row">
@@ -124,7 +124,7 @@
                 </div>
               </div>
               <div class="col-md-12">
-                <div class="card mb-3">
+                <div class="card mb-3 shadow">
                   <div class="card-body">
                     <div class="container" id="main-container">
                       <div class="row">
@@ -162,7 +162,7 @@
               </div>
               <div class="row gutters-sm">
                 <div class="col-md-12 mb-3">
-                  <div class="card">
+                  <div class="card shadow">
                     <div class="card-body">
                       <div class="container" id="main-container">
                         <div class="row">
@@ -208,15 +208,14 @@
 
     <ng-template #content let-modal>
       <div class="modal-header">
-        <h1 class="modal-title" id="modal-basic-title">Add Work Experience</h1>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
+        <h1 class="modal-title mt-2" id="modal-basic-title">Add Work Experience</h1>
+        <button type="button" class="btn-close p-2" style="font-size: .8rem;" aria-label="Close" (click)="modal.dismiss('Cross click')">
         </button>
       </div>
       <form name="form" #skillsForm="ngForm" (ngSubmit)="informSkillsAndExperience(skillsForm,'EXPERIENCE')">
         <div class="modal-body">
           <div class="form-group">
-              <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
+              <mat-form-field class="form-input" appearance="outline" style="width: 100%;">
                 <mat-label>Add your work experience</mat-label>
                 <input matInput type="text" name="work" id="work" placeholder="Work Experience" [(ngModel)]="skillsexperience.description" required>
               </mat-form-field> <br>
@@ -231,23 +230,22 @@
           </div> -->
        
         </div>
-        <div class="modal-footer">
-          <button [disabled]="!skillsexperience.description && !skillsexperience.isPublic" type="submit" class="btn btn-save">Save</button>
+        <div class="modal-footer justify-content-center">
+          <button [disabled]="!skillsexperience.description && !skillsexperience.isPublic" type="submit" class="btn btn-save w-25">Save</button>
         </div>
       </form>
     </ng-template>
 
     <ng-template #education let-modal>
       <div class="modal-header">
-        <h1 class="modal-title" id="modal-basic-title">Add Education</h1>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
+        <h1 class="modal-title mt-2" id="modal-basic-title">Add Education</h1>
+        <button type="button" class="btn-close p-2" style="font-size: .8rem;" aria-label="Close" (click)="modal.dismiss('Cross click')">
         </button>
       </div>
       <form name="form" #skillsForm="ngForm" (ngSubmit)="informSkillsAndExperience(skillsForm,'EDUCATION')">
         <div class="modal-body">
           <div class="form-group">
-              <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
+              <mat-form-field class="form-input" appearance="outline" style="width: 100%;">
                 <mat-label>Add education</mat-label>
                 <input matInput type="text" name="education" id="education" placeholder="Education" [(ngModel)]="skillsexperience.description" required>
               </mat-form-field> <br>
@@ -261,23 +259,22 @@
             </mat-radio-group> 
           </div> -->
         </div>
-        <div class="modal-footer">
-          <button [disabled]="!skillsexperience.description && !skillsexperience.isPublic" type="submit" class="btn btn-save">Save</button>
+        <div class="modal-footer justify-content-center">
+          <button [disabled]="!skillsexperience.description && !skillsexperience.isPublic" type="submit" class="btn btn-save w-25">Save</button>
         </div>
       </form>
     </ng-template>
 
     <ng-template #skills let-modal>
       <div class="modal-header">
-        <h1 class="modal-title" id="modal-basic-title">Add Skill</h1>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
+        <h1 class="modal-title mt-2" id="modal-basic-title">Add Skill</h1>
+        <button type="button" class="btn-close p-2" style="font-size: .8rem;" aria-label="Close" (click)="modal.dismiss('Cross click')">
         </button>
       </div>
       <form name="form" #skillsForm="ngForm" (ngSubmit)="informSkillsAndExperience(skillsForm,'SKILL')">
         <div class="modal-body">
           <div class="form-group">
-              <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
+              <mat-form-field class="form-input" appearance="outline" style="width: 100%;">
                 <mat-label>Add Skill</mat-label>
                 <input matInput type="text" name="skill" id="skill" placeholder="Skill" [(ngModel)]="skillsexperience.description" required>
               </mat-form-field> <br>
@@ -291,65 +288,64 @@
             </mat-radio-group> 
           </div>       -->
         </div>
-        <div class="modal-footer">
-          <button [disabled]="!skillsexperience.description && !skillsexperience.isPublic " type="submit" class="btn btn-save">Save</button>
+        <div class="modal-footer justify-content-center">
+          <button [disabled]="!skillsexperience.description && !skillsexperience.isPublic " type="submit" class="btn btn-save w-25">Save</button>
         </div>
       </form>
     </ng-template>
 
     <ng-template #editJobStatus let-modal>
       <div class="modal-header">
-        <h1 class="modal-title" id="modal-basic-title"><i class="fas fa-edit"></i> Edit Job Status</h1>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
+        <h1 class="modal-title mt-2" id="modal-basic-title"><i class="fas fa-edit"></i> Edit Job Status</h1>
+        <button type="button" class="btn-close p-2" style="font-size: .8rem;" aria-label="Close" (click)="modal.dismiss('Cross click')">
         </button>
       </div>
       <form name="form" #jobStatusForm="ngForm" (ngSubmit)="changeJobStatus(jobStatusForm)">
         <div class="modal-body">
           <div class="form-group">
-              <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
+              <mat-form-field class="form-input" appearance="outline" style="width: 100%;">
                 <mat-label>Job Description</mat-label>
                 <input matInput type="text" name="job" id="job" placeholder="Job Description" [(ngModel)]="user.currentJob" required>
               </mat-form-field> <br>
           </div>
 
           <div class="form-group">
-            <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
+            <mat-form-field class="form-input" appearance="outline" style="width: 100%;">
               <mat-label>Company</mat-label>
               <input matInput type="text" name="company" id="company" placeholder="Company" [(ngModel)]="user.currentCompany" required>
             </mat-form-field> <br>
           </div>
           <div class="form-group">
-            <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
+            <mat-form-field class="form-input" appearance="outline" style="width: 100%;">
               <mat-label>City</mat-label>
               <input matInput type="text" name="city" id="city" placeholder="city" [(ngModel)]="user.city" required>
             </mat-form-field> <br>
           </div>
           
           <div class="form-group">
-            <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
+            <mat-form-field class="form-input" appearance="outline" style="width: 100%;">
               <mat-label>My website</mat-label>
               <input matInput type="text" name="website" id="website" placeholder="My website" [(ngModel)]="user.website">
             </mat-form-field> <br>
           </div>
 
           <div class="form-group">
-            <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
+            <mat-form-field class="form-input" appearance="outline" style="width: 100%;">
               <mat-label>Github</mat-label>
               <input matInput type="text" name="github" id="github" placeholder="Github" [(ngModel)]="user.github">
             </mat-form-field> <br>
           </div>
 
           <div class="form-group">
-            <mat-form-field class="form-input" appearance="fill" style="width: 100%;">
+            <mat-form-field class="form-input" appearance="outline" style="width: 100%;">
               <mat-label>Twitter</mat-label>
               <input matInput type="text" name="twitter" id="twitter" placeholder="Twitter" [(ngModel)]="user.twitter">
             </mat-form-field> <br>
           </div>
          
         </div>
-        <div class="modal-footer">
-          <button [disabled]="!user.currentJob && !user.currentCompany && !user.city" type="submit" class="btn btn-save">Save</button>
+        <div class="modal-footer justify-content-center">
+          <button [disabled]="!user.currentJob && !user.currentCompany && !user.city" type="submit" class="btn btn-save w-25">Save</button>
         </div>
       </form>
     </ng-template>

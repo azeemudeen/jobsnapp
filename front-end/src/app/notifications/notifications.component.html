@@ -1,50 +1,37 @@
 <app-navbar></app-navbar>
 
 
-<div id="connections">
-    <div class="text-center p-5">
-        <h1 style="font-weight:bold; font-size: 25px;padding-top: 6%;">Connection requests</h1>
+<div >
+    <div class="text-center p-4">
+        <h1 style="font-weight:bold; font-size: 25px;padding-top: 6%;">Notifications</h1>
     </div>
-    <div *ngIf="connRequests.length == 0" class="text-center text-muted">
-        <p style="font-size: 20px;">No new connection requests</p>
+    <div *ngFor="let notification of userNotifications" class="px-5 mx-auto col justify-content-center" style="max-width: 80%;">
+        <div [ngClass]="notification.positive ? 'border-success text-success':'border-danger text-danger'" class="card text-center mb-3 shadow">
+            <div class="card-header fw-bold">
+            {{notification.title}}
+            </div>
+            <div  [ngClass]="notification.positive ? 'bg-success':'bg-danger'" class="card-body text-white">
+                {{notification.message}}
+                <!-- You're filtered for HR Position at Capegemini! , Kindly contact ronie@gmail.com for futher details -->
+            </div>
+            <div class="card-footer">
+                {{ notification.timestamp| date:'d/M/y, h:mm a'}}
+              </div>
+        </div>
+        <!-- <div class="card text-danger border-danger  text-center mb-3 shadow">
+            <div class="card-header fw-bold">
+            Unfortunatly Nick, You're not filtered!
+            </div>
+            <div class="card-body text-white bg-danger">
+                You're not filtered for HR Position at Capegemini!, Kindly contact ronie@gmail.com for futher details
+            </div>
+            <div class="card-footer">
+                18 Jan - 12:08 PM
+              </div>
+        </div> -->
     </div>
-    <div *ngIf="connRequests.length != 0" class="container align-self-center">
-        <ul  class="list-group">            
-            <li *ngFor="let con of connRequests;" class="list-group-item list-group-item-action list-group-item-light">
-                <span style="font-size: large;vertical-align: middle;" class="align-middle"> <a [routerLink]="['/users/',con.connection_request.userFollowing.id]" style="text-decoration: none;"><b>{{con.connection_request.userFollowing.name}} {{con.connection_request.userFollowing.surname}}</b></a> wants to connect with you</span>
-                <span type="button" class="btn btn-info rounded-pill align-middle" style="float:right; color: white;" (click)="goToProfile(con.connection_request.userFollowing)">View profile</span>
-                <span class="btn btn-success rounded-pill align-middle" style="float:right;color: white; margin-right: 4px;" (click)="acceptConnection(con.connection_request.id)">Accept</span>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<div id="postNotifications" style="padding-bottom: 5%;">
-    <div class="text-center p-5">
-        <h1 style="font-weight:bold; font-size: 25px;">Notifications from your posts</h1>
-    </div>
-    <div *ngIf="postNotifications.length == 0" class="text-center text-muted">
-        <p style="font-size: 20px;">No news from your posts</p>
-    </div>
-    <div *ngIf="postNotifications.length != 0" class="container align-self-center">
-        <ul class="list-group">    
-            <li *ngFor="let n of postNotifications" class="list-group-item list-group-item-action">
-                <div *ngIf="getType(n.type)==1">
-                    <span style="float:left;margin-right: 10px;"><i class="far fa-comments fa-2x"></i></span> 
-                    <span>
-                        User <b> {{n.new_comment.userMadeBy.name}} {{n.new_comment.userMadeBy.surname}} </b> commented: 
-                        <span style="font-style: italic;"> "{{ n.new_comment.content }}" </span> 
-                         on your post: <br>
-                        <span style="font-style: italic;" > <p style="margin-left: 5%;margin-top: 1%;"> "{{n.new_comment.post.content}}" </p>  </span>
-                    </span>                   
-                </div>
-                <div *ngIf="getType(n.type)==2" style="background-color:rgb(240, 240, 240);">
-                    <span style="float:left;margin-right: 10px;"><i class="far fa-thumbs-up fa-2x"></i></span>
-                    User <b> {{n.new_interest.userMadeBy.name}} {{n.new_interest.userMadeBy.surname}} </b> is interested on your post:<br>
-                    <span style="font-style: italic;" > <p style="margin-left: 5%;margin-top: 1%;">  "{{n.new_interest.post.content}}" </p> </span>
-                </div>                
-            </li>   
-        </ul>
+    <div *ngIf="userNotifications.length == 0" class="text-center text-muted">
+        <p style="font-size: 20px;">No new notification</p>
     </div>
 </div>
 

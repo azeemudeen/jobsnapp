@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
   dangerBox = false;
   submitattempt = false;
   currentUser: string = 'C';
+  hide = true;
 
   constructor(
     private route: ActivatedRoute,

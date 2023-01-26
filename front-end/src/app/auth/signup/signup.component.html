@@ -7,7 +7,7 @@
       </div>
       <div class="row justify-content-center login-card">
        
-        <div class="card" style="width: 28rem;">
+        <div class="shadow card" style="width: 28rem;">
           <div class="header-content">
             <h3 class="heading">Sign up</h3>
             <p class="sub-heading">Create your professional world</p>
@@ -20,32 +20,32 @@
                   <mat-radio-button value="R" name="recruiter">Recruiter</mat-radio-button>
                 </mat-radio-group> 
               </div>
-              <mat-form-field class="form-input"  appearance="fill">
+              <mat-form-field class="form-input"  appearance="outline">
                     <mat-label>First Name</mat-label>
                     <input matInput type="text" name="name" id="name" placeholder="Ex. Nick" [(ngModel)]="user.name" #name="ngModel" required [class.is-invalid]="name.invalid && submitattempt">
                 </mat-form-field><br>
 
-                <mat-form-field class="form-input" appearance="fill">
+                <mat-form-field class="form-input" appearance="outline">
                     <mat-label>Last Name</mat-label>
                     <input matInput type="text" name="surname" id="surname"  placeholder="Ex. Brown" [(ngModel)]="user.surname" #surname="ngModel" required [class.is-invalid]="surname.invalid && submitattempt">
                 </mat-form-field><br>
 
-                <mat-form-field class="form-input" appearance="fill">
+                <mat-form-field class="form-input" appearance="outline">
                     <mat-label>Email</mat-label>
                     <input matInput type="username" name="username" id="username" placeholder="Ex. pat@example.com" [(ngModel)]="user.username" #username="ngModel" required [class.is-invalid]="username.invalid && submitattempt">
                   </mat-form-field><br>
 
-                <mat-form-field class="form-input" appearance="fill">
+                <mat-form-field class="form-input" appearance="outline">
                     <mat-label>Password</mat-label>
-                    <input matInput type="password" name="password id="password placeholder="Password" [(ngModel)]="user.password" #password="ngModel" required [class.is-invalid]="password.invalid && submitattempt">
+                    <input minlength="6" matInput type="password" name="password id="password placeholder="Password" [(ngModel)]="user.password" #password="ngModel" required [class.is-invalid]="password.invalid && submitattempt">
                 </mat-form-field> <br>
 
-                <mat-form-field class="form-input" appearance="fill">
+                <mat-form-field class="form-input" appearance="outline">
                     <mat-label>Repeat Password</mat-label>
-                    <input matInput type="password" name="passwordConfirm" id="passwordConfirm" placeholder="Repeat Password" [(ngModel)]="user.passwordConfirm" #passwordConfirm="ngModel" required>
+                    <input minlength="6" matInput type="password" name="passwordConfirm" id="passwordConfirm" placeholder="Repeat Password" [(ngModel)]="user.passwordConfirm" #passwordConfirm="ngModel" required>
                 </mat-form-field><br>
 
-                <mat-form-field class="form-input" appearance="fill">
+                <mat-form-field class="form-input" appearance="outline">
                     <mat-label>Phone Number</mat-label>
                     <input matInput type="text" name="phoneNumber" id="phoneNumber" placeholder="Phonenumber" [(ngModel)]="user.phoneNumber" #phone="ngModel" required
                       [class.is-invalid]="submitattempt && (user.passwordConfirm || user.password) && user.password !== user.passwordConfirm">
@@ -54,7 +54,7 @@
                   <label for="profilephoto" style="display: block">
                     <span>Profile photo </span> <span class="text-danger" >*</span>
                   </label>
-                  <input #profilephoto id="profilephoto" type="file" accept=".jpg,.jpeg,.png" style="display: block" (change)="setProfilePhoto(profilephoto)" required >
+                  <input #profilephoto class="form-control" id="profilephoto" type="file" accept=".jpg,.jpeg,.png" style="display: block" (change)="setProfilePhoto(profilephoto)" required >
                   <small *ngIf="profilePhoto && (profilePhoto.type !='image/jpeg' && profilePhoto.type !='image/png') && submitattempt " >Image file must be jpeg or png</small>
                   <small *ngIf="!profilePhoto && submitattempt" style="color: red;">Please choose profile photo</small>
                 </div>
@@ -63,7 +63,7 @@
                   <label for="resumeFile" style="display: block">
                     <span>Resume </span> <span class="text-danger" >*</span>
                   </label>
-                  <input #resumeFile id="resume" type="file" accept=".pdf" style="display: block" (change)="setResumeFile(resumeFile)" required>
+                  <input class="form-control" #resumeFile id="resume" type="file" accept=".pdf" style="display: block" (change)="setResumeFile(resumeFile)" required>
                   <small *ngIf="resumeFile && (resumeFile.type !='application/pdf') && submitattempt " >Resume file must be pdf</small>
                   <small *ngIf="!resumeFile && submitattempt" style="color: red;">Please choose resume</small>
                 </div>
